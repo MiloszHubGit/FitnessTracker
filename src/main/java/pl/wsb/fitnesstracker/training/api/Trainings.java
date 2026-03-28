@@ -2,13 +2,13 @@ package pl.wsb.fitnesstracker.training.api;
 
 import lombok.Getter;
 import pl.wsb.fitnesstracker.training.internal.ActivityType;
-import pl.wsb.fitnesstracker.user.api.User;
+import pl.wsb.fitnesstracker.user.internal.User;
 
 import java.util.Date;
 
 @Getter
 
-public class Training {
+public class Trainings {
 
     private Long id;
 
@@ -24,7 +24,7 @@ public class Training {
 
     private double averageSpeed;
 
-    public Training(
+    public Trainings(
             final User user,
 
             final Date startTime,

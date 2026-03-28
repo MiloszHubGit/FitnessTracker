@@ -1,4 +1,4 @@
-package pl.wsb.fitnesstracker.statistics.api;
+package pl.wsb.fitnesstracker.statistics.internal;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
