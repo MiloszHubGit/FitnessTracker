@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wsb.fitnesstracker.event.Event;
 import pl.wsb.fitnesstracker.event.EventRepository;
+import pl.wsb.fitnesstracker.event.UserEvent;
 import pl.wsb.fitnesstracker.training.api.Trainings;
 import pl.wsb.fitnesstracker.training.internal.ActivityType;
 import pl.wsb.fitnesstracker.user.internal.User;
@@ -41,6 +42,8 @@ class InitialDataLoader {
 
     private final EventRepository eventRepository;
 
+    private final JpaRepository<UserEvent, Long> userEventRepository;
+
     @EventListener
     @Transactional
     @SuppressWarnings({"squid:S1854", "squid:S1481", "squid:S1192", "unused"})
@@ -52,6 +55,7 @@ class InitialDataLoader {
         List<User> sampleUserList = generateSampleUsers();
         List<Trainings> sampleTrainingList = generateTrainingData(sampleUserList);
         List<Event> sampleEventList = generateEventData();
+        generateUserEventData(sampleUserList, sampleEventList);
 
         log.info("Finished loading initial data");
     }
@@ -185,6 +189,26 @@ class InitialDataLoader {
         log.info("Nadchodzące eventy: " + upcoming.size());
 
         return events;
+    }
+
+    private void generateUserEventData(List<User> users, List<Event> events) {
+        List<UserEvent> userEvents = new ArrayList<>();
+
+        // Register some users to events
+        userEvents.add(new UserEvent(users.get(0), events.get(0), LocalDateTime.now().minusDays(10)));
+        userEvents.add(new UserEvent(users.get(1), events.get(0), LocalDateTime.now().minusDays(5)));
+        userEvents.add(new UserEvent(users.get(2), events.get(1), LocalDateTime.now().minusDays(20)));
+        userEvents.add(new UserEvent(users.get(3), events.get(2), LocalDateTime.now().minusDays(1)));
+        userEvents.add(new UserEvent(users.get(4), events.get(2), LocalDateTime.now().minusDays(2)));
+        userEvents.add(new UserEvent(users.get(5), events.get(3), LocalDateTime.now().minusDays(3)));
+
+        userEventRepository.saveAll(userEvents);
+
+        // Demonstrate the native query
+        List<Object[]> results = eventRepository.findEventNamesWithParticipantCount();
+        for (Object[] row : results) {
+            log.info("Event: " + row[0] + ", Participants: " + row[1]);
+        }
     }
 
     private void verifyDependenciesAutowired() {
