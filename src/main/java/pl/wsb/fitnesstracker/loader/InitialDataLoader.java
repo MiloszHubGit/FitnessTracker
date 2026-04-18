@@ -9,12 +9,15 @@ import org.springframework.context.event.EventListener;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import pl.wsb.fitnesstracker.event.Event;
+import pl.wsb.fitnesstracker.event.EventRepository;
 import pl.wsb.fitnesstracker.training.api.Trainings;
 import pl.wsb.fitnesstracker.training.internal.ActivityType;
 import pl.wsb.fitnesstracker.user.internal.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +39,8 @@ class InitialDataLoader {
 
     private final JpaRepository<Trainings, Long> trainingRepository;
 
+    private final EventRepository eventRepository;
+
     @EventListener
     @Transactional
     @SuppressWarnings({"squid:S1854", "squid:S1481", "squid:S1192", "unused"})
@@ -46,7 +51,7 @@ class InitialDataLoader {
 
         List<User> sampleUserList = generateSampleUsers();
         List<Trainings> sampleTrainingList = generateTrainingData(sampleUserList);
-
+        List<Event> sampleEventList = generateEventData();
 
         log.info("Finished loading initial data");
     }
@@ -160,6 +165,26 @@ class InitialDataLoader {
         }
 
         return trainingData;
+    }
+
+    private List<Event> generateEventData() {
+        List<Event> events = new ArrayList<>();
+
+        // Past events
+        events.add(new Event("Marathon 2023", LocalDateTime.of(2023, 10, 15, 9, 0), "Warsaw"));
+        events.add(new Event("Cycling Race 2024", LocalDateTime.of(2024, 5, 20, 8, 30), "Krakow"));
+
+        // Future events
+        events.add(new Event("Half Marathon 2026", LocalDateTime.of(2026, 6, 10, 7, 0), "Gdansk"));
+        events.add(new Event("Triathlon 2026", LocalDateTime.of(2026, 8, 5, 6, 30), "Poznan"));
+
+        eventRepository.saveAll(events);
+
+        // Demonstrate the query
+        List<Event> upcoming = eventRepository.findUpcoming(LocalDateTime.now());
+        log.info("Nadchodzące eventy: " + upcoming.size());
+
+        return events;
     }
 
     private void verifyDependenciesAutowired() {
