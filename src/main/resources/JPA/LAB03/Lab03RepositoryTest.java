@@ -82,8 +82,8 @@ class Lab03RepositoryTest {
         em.persist(u1);
         em.persist(u2);
         em.persist(event);
-        em.persist(new UserEvent(u1, event));
-        em.persist(new UserEvent(u2, event));
+        em.persist(new UserEvent(u1, event, LocalDate.now()));
+        em.persist(new UserEvent(u2, event, LocalDate.now()));
         em.flush();
 
         long count = userEventRepository.countParticipants(event.getId());

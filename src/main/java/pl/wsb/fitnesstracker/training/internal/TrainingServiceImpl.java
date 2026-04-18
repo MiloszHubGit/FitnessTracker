@@ -1,6 +1,6 @@
 package pl.wsb.fitnesstracker.training.internal;
 
-import pl.wsb.fitnesstracker.training.api.Training;
+import pl.wsb.fitnesstracker.training.api.Trainings;
 import pl.wsb.fitnesstracker.training.api.TrainingProvider;
 
 import java.util.Optional;
@@ -9,7 +9,7 @@ import java.util.Optional;
 public class TrainingServiceImpl implements TrainingProvider {
 
     @Override
-    public Optional<Training> getTraining(final Long trainingId) {
+    public Optional<Trainings> getTraining(final Long trainingId) {
         throw new UnsupportedOperationException("Not finished yet");
     }
 

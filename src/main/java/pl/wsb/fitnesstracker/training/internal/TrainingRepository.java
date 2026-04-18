@@ -1,7 +1,7 @@
 package pl.wsb.fitnesstracker.training.internal;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import pl.wsb.fitnesstracker.training.api.Training;
+import pl.wsb.fitnesstracker.training.api.Trainings;
 
-public interface TrainingRepository extends JpaRepository<Training, Long> {
+public interface TrainingRepository extends JpaRepository<Trainings, Long> {
 }
