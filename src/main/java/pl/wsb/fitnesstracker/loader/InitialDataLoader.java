@@ -12,12 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wsb.fitnesstracker.event.Event;
 import pl.wsb.fitnesstracker.event.EventRepository;
 import pl.wsb.fitnesstracker.event.UserEvent;
-import pl.wsb.fitnesstracker.training.api.Trainings;
+import pl.wsb.fitnesstracker.training.api.Training;
 import pl.wsb.fitnesstracker.training.internal.ActivityType;
 import pl.wsb.fitnesstracker.user.internal.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ class InitialDataLoader {
 
     private final JpaRepository<User, Long> userRepository;
 
-    private final JpaRepository<Trainings, Long> trainingRepository;
+    private final JpaRepository<Training, Long> trainingRepository;
 
     private final EventRepository eventRepository;
 
@@ -53,7 +54,7 @@ class InitialDataLoader {
         log.info("Loading initial data to the database");
 
         List<User> sampleUserList = generateSampleUsers();
-        List<Trainings> sampleTrainingList = generateTrainingData(sampleUserList);
+        List<Training> sampleTrainingList = generateTrainingData(sampleUserList);
         List<Event> sampleEventList = generateEventData();
         generateUserEventData(sampleUserList, sampleEventList);
 
@@ -85,67 +86,67 @@ class InitialDataLoader {
         return users;
     }
 
-    private List<Trainings> generateTrainingData(List<User> users) {
-        List<Trainings> trainingData = new ArrayList<>();
+    private List<Training> generateTrainingData(List<User> users) {
+        List<Training> trainingData = new ArrayList<>();
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-            Trainings training1 = new Trainings(users.get(0),
+            Training training1 = new Training(users.get(0),
                     sdf.parse("2024-01-19 08:00:00"),
                     sdf.parse("2024-01-19 09:30:00"),
                     ActivityType.RUNNING,
                     10.5,
                     8.2);
-            Trainings training2 = new Trainings(users.get(1),
+            Training training2 = new Training(users.get(1),
                     sdf.parse("2024-01-18 15:30:00"),
                     sdf.parse("2024-01-18 17:00:00"),
                     ActivityType.CYCLING,
                     25.0,
                     18.5);
-            Trainings training3 = new Trainings(users.get(2),
+            Training training3 = new Training(users.get(2),
                     sdf.parse("2024-01-17 07:45:00"),
                     sdf.parse("2024-01-17 09:00:00"),
                     ActivityType.WALKING,
                     5.2,
                     5.8);
-            Trainings training4 = new Trainings(users.get(3),
+            Training training4 = new Training(users.get(3),
                     sdf.parse("2024-01-16 18:00:00"),
                     sdf.parse("2024-01-16 19:30:00"),
                     ActivityType.RUNNING,
                     12.3,
                     9.0);
-            Trainings training5 = new Trainings(users.get(4),
+            Training training5 = new Training(users.get(4),
                     sdf.parse("2024-01-15 12:30:00"),
                     sdf.parse("2024-01-15 13:45:00"),
                     ActivityType.CYCLING,
                     18.7,
                     15.3);
-            Trainings training6 = new Trainings(users.get(5),
+            Training training6 = new Training(users.get(5),
                     sdf.parse("2024-01-14 09:00:00"),
                     sdf.parse("2024-01-14 10:15:00"),
                     ActivityType.WALKING,
                     3.5,
                     4.0);
-            Trainings training7 = new Trainings(users.get(6),
+            Training training7 = new Training(users.get(6),
                     sdf.parse("2024-01-13 16:45:00"),
                     sdf.parse("2024-01-13 18:30:00"),
                     ActivityType.RUNNING,
                     15.0,
                     10.8);
-            Trainings training8 = new Trainings(users.get(7),
+            Training training8 = new Training(users.get(7),
                     sdf.parse("2024-01-12 11:30:00"),
                     sdf.parse("2024-01-12 12:45:00"),
                     ActivityType.CYCLING,
                     22.5,
                     17.2);
-            Trainings training9 = new Trainings(users.get(8),
+            Training training9 = new Training(users.get(8),
                     sdf.parse("2024-01-11 07:15:00"),
                     sdf.parse("2024-01-11 08:30:00"),
                     ActivityType.WALKING,
                     4.2,
                     4.5);
-            Trainings training10 = new Trainings(users.get(9),
+            Training training10 = new Training(users.get(9),
                     sdf.parse("2024-01-10 14:00:00"),
                     sdf.parse("2024-01-10 15:15:00"),
                     ActivityType.RUNNING,
@@ -175,17 +176,17 @@ class InitialDataLoader {
         List<Event> events = new ArrayList<>();
 
         // Past events
-        events.add(new Event("Marathon 2023", LocalDateTime.of(2023, 10, 15, 9, 0), "Warsaw"));
-        events.add(new Event("Cycling Race 2024", LocalDateTime.of(2024, 5, 20, 8, 30), "Krakow"));
+        events.add(new Event("Marathon 2023", LocalDate.of(2023, 10, 15), "Warsaw"));
+        events.add(new Event("Cycling Race 2024", LocalDate.of(2024, 5, 20), "Krakow"));
 
         // Future events
-        events.add(new Event("Half Marathon 2026", LocalDateTime.of(2026, 6, 10, 7, 0), "Gdansk"));
-        events.add(new Event("Triathlon 2026", LocalDateTime.of(2026, 8, 5, 6, 30), "Poznan"));
+        events.add(new Event("Half Marathon 2026", LocalDate.of(2026, 6, 10), "Gdansk"));
+        events.add(new Event("Triathlon 2026", LocalDate.of(2026, 8, 5), "Poznan"));
 
         eventRepository.saveAll(events);
 
         // Demonstrate the query
-        List<Event> upcoming = eventRepository.findUpcoming(LocalDateTime.now());
+        List<Event> upcoming = eventRepository.findUpcoming(LocalDate.now());
         log.info("Nadchodzące eventy: " + upcoming.size());
 
         return events;
