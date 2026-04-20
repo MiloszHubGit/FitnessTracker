@@ -72,7 +72,7 @@ implementację z gotowymi metodami: `save`, `findById`, `findAll`, `deleteById`.
 
 Minimalny przykład — nic nie musimy pisać w środku, żeby mieć podstawowe CRUD:
 
-```java
+```text
 package pl.wsb.fitnesstracker.event;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -92,7 +92,7 @@ Wyobraź sobie, że na stronie głównej chcemy pokazać **listę nadchodzących
 (czyli tych, których `startDate` jest w przyszłości). W JPQL piszemy zapytanie
 **posługując się nazwami klas i pól Javy** (a nie tabel i kolumn bazy).
 
-```java
+```text
 public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT e FROM Event e WHERE e.startDate > :now ORDER BY e.startDate")
@@ -110,7 +110,7 @@ Co warto zauważyć:
 
 **Użycie w teście** (albo tymczasowo w `InitialDataLoader`):
 
-```java
+```text
 List<Event> events = eventRepository.findUpcoming(LocalDate.now());
 System.out.println("Nadchodzące eventy: " + events.size());
 ```
@@ -140,7 +140,7 @@ Porównanie:
 
 Ile osób zapisało się na dany event? (`UserEventRepository`)
 
-```java
+```text
 @Query(
     value = "SELECT COUNT(*) FROM user_event WHERE event_id = :eventId",
     nativeQuery = true
@@ -160,7 +160,7 @@ long countParticipants(@Param("eventId") Long eventId);
 
 Wywołaj wybraną metodę w `InitialDataLoader` albo w prostym teście:
 
-```java
+```text
 System.out.println("Łącznie treningów: " + trainingRepository.countAllTrainings());
 ```
 
