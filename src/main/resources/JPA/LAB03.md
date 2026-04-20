@@ -1,4 +1,4 @@
-Laboratorium III - Pierwsze repozytorium JPA i proste zapytania - stan na 18.04.2026 09:00
+Laboratorium III - Pierwsze repozytorium JPA i proste zapytania - stan na 19.04.2026 16:15
 
 **Uwaga - Przed przystąpieniem do zadania należy mieć ukończone LAB01 oraz LAB02.**
 
@@ -16,7 +16,9 @@ przez które aplikacja **czyta i zapisuje** dane. Plan zajęć (1.5h):
 ## 0. Przygotowanie
 
 1. Zsynchronizuj swój projekt z projektem prowadzącego (Sync Fork / Pull).
-2. Zweryfikuj, że projekt buduje się lokalnie (`mvn clean install`) i na GitHubie
+2. Zweryfikuj, że projekt buduje się lokalnie (uruchom `clean install` z
+   **wbudowanego w IntelliJ widoku Maven** — panel *Maven* po prawej stronie
+   IDE → `Lifecycle` → dwuklik na `clean`, potem `install`) oraz na GitHubie
    (zakładka Actions). Pipeline powinien być zielony.
 3. Nadpisz workflow i dociągnij nowy test:
     - **Nadpisz** `.github/workflows/github-ci-cd.yml` wersją z
@@ -38,13 +40,14 @@ przez które aplikacja **czyta i zapisuje** dane. Plan zajęć (1.5h):
 ## 1. Nowe encje w modelu
 
 W LAB02 zrobiliśmy encje: `User`, `Training`, `Statistics`, `HealthMetrics`.
-Dzisiaj dokładamy jeszcze **trzy**, żeby mieć co pytać w zapytaniach:
+Dzisiaj dokładamy jeszcze **cztery**, żeby mieć co pytać w zapytaniach:
 
-| Encja            | Po co?                                                                           |
-|------------------|----------------------------------------------------------------------------------|
-| `WorkoutSession` | Log jednego treningu — współrzędne GPS startu/końca i wysokość (`altitude`).     |
-| `Event`          | Wydarzenie sportowe (np. maraton) — ma `name`, `startDate`, `location`.          |
-| `UserEvent`      | Rejestracja użytkownika na Event — łączy `User` z `Event` + `registrationDate`.  |
+| Encja            | Po co?                                                                             |
+|------------------|------------------------------------------------------------------------------------|
+| `WorkoutSession` | Log jednego treningu — współrzędne GPS startu/końca i wysokość (`altitude`).       |
+| `Event`          | Wydarzenie sportowe (np. maraton) — ma `name`, `startDate`, `location`.            |
+| `UserEvent`      | Rejestracja użytkownika na Event — łączy `User` z `Event` + `registrationDate`.    |
+| `Achievement`    | Osiągnięcie zdobyte przez użytkownika (np. "Pierwsze 10 km") — `name`, `earnedAt`. |
 
 **Relacje (używamy tylko `@ManyToOne` — jeden nowy typ relacji):**
 
@@ -52,11 +55,17 @@ Dzisiaj dokładamy jeszcze **trzy**, żeby mieć co pytać w zapytaniach:
   np. gdy użytkownik zrobił przerwę i wznowił).
 - `UserEvent` → `User`: `@ManyToOne` (jeden użytkownik może mieć wiele rejestracji).
 - `UserEvent` → `Event`: `@ManyToOne` (na jeden event zapisuje się wielu użytkowników).
+- `Achievement` → `User`: `@ManyToOne` (jeden użytkownik może zdobyć wiele osiągnięć).
 
-> **Wskazówka:** klasa `WorkoutSession` już jest w projekcie (`pl.wsb.fitnesstracker.workoutsession`),
+> **Wskazówka 1:** klasa `WorkoutSession` już jest w projekcie (`pl.wsb.fitnesstracker.workoutsession`),
 > ale to na razie zwykły POJO. Twoim zadaniem jest dodać `@Entity`, poprawne `@Id`
 > (`Long` + `@GeneratedValue`) i zamienić pole `trainingId` na relację `@ManyToOne` do
 > `Training`. Pole `timestamp` zmień z `String` na `LocalDateTime`.
+>
+> **Wskazówka 2:** pakiet `pl.wsb.fitnesstracker.achievement` już istnieje, ale jest
+> pusty (samo `package-info.java`). Utwórz w nim klasę `Achievement` od zera: `@Entity`,
+> `@Id` typu `Long` + `@GeneratedValue`, pola `name` (String), `earnedAt`
+> (`LocalDateTime`) oraz relacja `@ManyToOne` do `User`.
 
 Uzupełnij schemat (`db_schema.png`).
 
@@ -168,7 +177,8 @@ System.out.println("Łącznie treningów: " + trainingRepository.countAllTrainin
 
 ## 5. Commit & push
 
-1. Upewnij się, że `mvn clean install` przechodzi lokalnie.
+1. Upewnij się, że `clean install` z **wbudowanego w IntelliJ widoku Maven**
+   (panel *Maven* → `Lifecycle`) przechodzi lokalnie.
 2. Scommituj zmiany i wyślij na swoje repo — testy powinny być zielone na GitHub Actions.
 3. Zgłoś prowadzącemu wykonanie zadania.
 
@@ -177,7 +187,7 @@ System.out.println("Łącznie treningów: " + trainingRepository.countAllTrainin
 ## Kryteria akceptacji
 
 **Ocena 5:**
-- Nowe encje `WorkoutSession`, `Event`, `UserEvent` zdefiniowane razem z relacjami `@ManyToOne`.
+- Nowe encje `WorkoutSession`, `Event`, `UserEvent`, `Achievement` zdefiniowane razem z relacjami `@ManyToOne`.
 - `DatabaseSchemaTest` przechodzi lokalnie i na GitHub Actions.
 - Dodane **jedno `JpaRepository`** z co najmniej **dwoma zapytaniami `@Query`**:
   - **minimum 1 zapytanie w natywnym SQL** (`nativeQuery = true`) — zgodnie z sekcją 4,
@@ -185,7 +195,7 @@ System.out.println("Łącznie treningów: " + trainingRepository.countAllTrainin
 - Zielony build na GitHub Actions po wypchnięciu zmian.
 
 **Ocena 4:**
-- Poprawnie zdefiniowane 2 z 3 nowych encji wraz z relacjami.
+- Poprawnie zdefiniowane 3 z 4 nowych encji wraz z relacjami.
 - `JpaRepository` utworzone (może być bez własnego zapytania, sam interfejs).
 - Zielony `DatabaseSchemaTest` dla tych encji.
 
