@@ -88,6 +88,7 @@ class Lab03EntitiesTest {
         }
     }
 
+    @Test
     void achievementTableHasUserForeignKey() throws Exception {
         try (Connection conn = dataSource.getConnection()) {
             Set<String> cols = tableColumns(conn, "achievement");
