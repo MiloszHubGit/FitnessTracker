@@ -1,7 +1,7 @@
 package pl.wsb.fitnesstracker.achievement;
 
 import jakarta.persistence.*;
-import pl.wsb.fitnesstracker.user.api.User;
+import pl.wsb.fitnesstracker.user.internal.User;
 import java.time.LocalDateTime;
 
 @Entity
