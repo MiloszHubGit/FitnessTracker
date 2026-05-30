@@ -6,7 +6,9 @@
       "Read(//c/Users/Sprzetowo/.jdks//**)",
       "Read(//c/Users/Sprzetowo/scoop/**)",
       "Read(//c/Users/Sprzetowo/.m2//**)",
-      "Bash(find /c -maxdepth 5 -name \"mvn\" -o -name \"mvn.cmd\")"
+      "Bash(find /c -maxdepth 5 -name \"mvn\" -o -name \"mvn.cmd\")",
+      "PowerShell($env:PATH -split ';' | Where-Object { $_ -ne '' })",
+      "PowerShell(Get-ChildItem *)"
     ]
   }
 }
