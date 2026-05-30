@@ -1,4 +1,4 @@
-package pl.wsb.fitnesstracker.user.internal;
+package pl.wsb.fitnesstracker.user.api;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -44,4 +44,13 @@ public class User {
         this.email = email;
     }
 
+    /**
+     * Updates this user's fields with the provided values.
+     */
+    public void update(String firstName, String lastName, LocalDate birthdate, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthdate = birthdate;
+        this.email = email;
+    }
 }

@@ -1,7 +1,6 @@
 package pl.wsb.fitnesstracker.statistics.internal;
 
-// KLUCZOWY IMPORT: Importujemy Usera z jego własnego modułu
-import pl.wsb.fitnesstracker.user.internal.User;
+import pl.wsb.fitnesstracker.user.api.User;
 
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import pl.wsb.fitnesstracker.user.internal.User;
+import pl.wsb.fitnesstracker.user.api.User;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

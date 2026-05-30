@@ -1,35 +1,50 @@
 package pl.wsb.fitnesstracker.user.api;
 
-import pl.wsb.fitnesstracker.user.internal.User;
-
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Interface (API) for read operations on {@link User} entities.
+ */
 public interface UserProvider {
 
     /**
-     * Retrieves a user based on their ID.
-     * If the user with given ID is not found, then {@link Optional#empty()} will be returned.
+     * Retrieves a user by ID.
      *
-     * @param userId id of the user to be searched
-     * @return An {@link Optional} containing the located user, or {@link Optional#empty()} if not found
+     * @param userId the ID of the user
+     * @return an {@link Optional} containing the found user, or empty if not found
      */
     Optional<User> getUser(Long userId);
 
     /**
-     * Retrieves a user based on their email.
-     * If the user with given email is not found, then {@link Optional#empty()} will be returned.
+     * Retrieves a user by exact email address.
      *
-     * @param email The email of the user to be searched
-     * @return An {@link Optional} containing the located user, or {@link Optional#empty()} if not found
+     * @param email the email address to match
+     * @return an {@link Optional} containing the found user, or empty if not found
      */
     Optional<User> getUserByEmail(String email);
 
     /**
      * Retrieves all users.
      *
-     * @return An {@link Optional} containing the all users,
+     * @return list of all users
      */
     List<User> findAllUsers();
 
+    /**
+     * Retrieves users whose email contains the given fragment (case-insensitive).
+     *
+     * @param emailFragment the email fragment to search for
+     * @return list of matching users
+     */
+    List<User> findUsersByEmailFragment(String emailFragment);
+
+    /**
+     * Retrieves users born before the given date (older than that date).
+     *
+     * @param date the reference date
+     * @return list of users whose birthdate is before {@code date}
+     */
+    List<User> findUsersOlderThan(LocalDate date);
 }
